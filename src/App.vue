@@ -1,21 +1,44 @@
+<script setup>
+  import {ref} from 'vue'
+
+  const showModal = ref(false)
+  const newNote = ref("")
+  const notes = ref([])
+
+  const getRandomColor = () => {
+    const randomColor = "hsl(" + Math.random() * 360 + ", 100%, 75%)"
+    return randomColor
+  }
+  const addNote = () => {
+    notes.value.push({
+      id: Math.floor(Math.random() * 1000000),
+      text: newNote.value,
+      date: new Date(),
+      backgroundColor: getRandomColor()
+    })
+    showModal.value = false
+    newNote.value = ""
+  }
+</script>
+
 <template>
   <main>
-    <div class="overlay">
+    <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea name="note" id="note" cols="30" rows="10"></textarea>
-        <button>Add Note</button>
-        <button id="close">Close</button>
+        <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <button @click="addNote">Add Note</button>
+        <button id="close" @click="showModal=false">Close</button>
       </div>
     </div>
     <div class="container">
       <header>
-        <h1>Notes</h1>
-        <button>+</button>
+        <h1>Notes</h1> 
+        <button @click="showModal=true">+</button>
       </header>
       <div class="cards-container">
-        <div class="cards">
-          <p class="main-text">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit quas doloremque, debitis voluptate provident ex?</p>
-          <p class="date">lorem</p>
+        <div v-for="note in notes" :key="note.id" class="cards" :style="{backgroundColor: note.backgroundColor}">
+          <p class="main-text">{{note.text}}</p>
+          <p class="date">{{note.date.toLocaleDateString("en-US")}}</p>
         </div>
       </div>
     </div>
@@ -31,7 +54,7 @@ main{
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.66);
+  background-color: rgba(0,0,0,0.60);
   z-index: 10;
   display: flex;
   justify-content: center;
@@ -50,7 +73,7 @@ header{
 h1{
   font-weight: bold;
   margin-bottom: 25px;
-  font-size: 75px;
+  font-size: 48px;
 }
 header button{
   border: none;
@@ -84,7 +107,7 @@ header button{
   text-align: center;
 }
 .modal{
-  width: 750px;
+  width: 600px;
   background-color: azure;
   border-radius: 10px;
   padding: 30px;
