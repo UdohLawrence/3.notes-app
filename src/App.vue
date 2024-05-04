@@ -3,15 +3,22 @@ import { ref } from 'vue'
 
 const showModal = ref(false)
 const newNote = ref('')
+const errorMessage = ref('')
 const notes = ref([])
 
 const getRandomColor = () => {
   const randomColor = 'hsl(' + Math.random() * 360 + ', 100%, 75%)'
   return randomColor
 }
+const closeModal = () => {
+  errorMessage.value = ''
+  showModal.value = false
+  newNote.value = ''
+}
 const addNote = () => {
   if(newNote.value.length < 15){
-    alert("Your note should be up to 15 characters in length")
+    errorMessage.value = "Each note shoulb be 15 characters or more"
+
     return
   }
   notes.value.push({
@@ -22,6 +29,7 @@ const addNote = () => {
   })
   showModal.value = false
   newNote.value = ''
+  errorMessage.value = ''
 }
 </script>
 
@@ -30,8 +38,9 @@ const addNote = () => {
     <div v-if="showModal" class="overlay">
       <div class="modal">
         <textarea v-model.trim="newNote" name="note" id="note" cols="30" rows="10"></textarea>
+        <p v-if="errorMessage">{{errorMessage}}</p>
         <button @click="addNote">Add Note</button>
-        <button id="close" @click="showModal = false">Close</button>
+        <button id="close" @click="closeModal">Close</button>
       </div>
     </div>
     <div class="container">
@@ -135,6 +144,7 @@ header button {
   cursor: pointer;
   border-radius: 16px;
 }
+.modal p{color:red}
 #close {
   background-color: red;
 }
