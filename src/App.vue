@@ -1,24 +1,28 @@
 <script setup>
-  import {ref} from 'vue'
+import { ref } from 'vue'
 
-  const showModal = ref(false)
-  const newNote = ref("")
-  const notes = ref([])
+const showModal = ref(false)
+const newNote = ref('')
+const notes = ref([])
 
-  const getRandomColor = () => {
-    const randomColor = "hsl(" + Math.random() * 360 + ", 100%, 75%)"
-    return randomColor
+const getRandomColor = () => {
+  const randomColor = 'hsl(' + Math.random() * 360 + ', 100%, 75%)'
+  return randomColor
+}
+const addNote = () => {
+  if(newNote.value.length < 15){
+    alert("Your note should be up to 15 characters in length")
+    return
   }
-  const addNote = () => {
-    notes.value.push({
-      id: Math.floor(Math.random() * 1000000),
-      text: newNote.value,
-      date: new Date(),
-      backgroundColor: getRandomColor()
-    })
-    showModal.value = false
-    newNote.value = ""
-  }
+  notes.value.push({
+    id: Math.floor(Math.random() * 1000000),
+    text: newNote.value,
+    date: new Date(),
+    backgroundColor: getRandomColor()
+  })
+  showModal.value = false
+  newNote.value = ''
+}
 </script>
 
 <template>
@@ -27,18 +31,23 @@
       <div class="modal">
         <textarea v-model="newNote" name="note" id="note" cols="30" rows="10"></textarea>
         <button @click="addNote">Add Note</button>
-        <button id="close" @click="showModal=false">Close</button>
+        <button id="close" @click="showModal = false">Close</button>
       </div>
     </div>
     <div class="container">
       <header>
-        <h1>Notes</h1> 
-        <button @click="showModal=true">+</button>
+        <h1>Notes</h1>
+        <button @click="showModal = true">+</button>
       </header>
       <div class="cards-container">
-        <div v-for="note in notes" :key="note.id" class="cards" :style="{backgroundColor: note.backgroundColor}">
-          <p class="main-text">{{note.text}}</p>
-          <p class="date">{{note.date.toLocaleDateString("en-US")}}</p>
+        <div
+          v-for="note in notes"
+          :key="note.id"
+          class="cards"
+          :style="{ backgroundColor: note.backgroundColor }"
+        >
+          <p class="main-text">{{ note.text }}</p>
+          <p class="date">{{ note.date.toLocaleDateString('en-US') }}</p>
         </div>
       </div>
     </div>
@@ -46,53 +55,53 @@
 </template>
 
 <style scoped>
-main{
+main {
   height: 100vh;
   width: 100vw;
 }
-.overlay{
+.overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.60);
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.container{
+.container {
   max-width: 1000px;
   padding: 10px;
   margin: 0 auto;
 }
-header{
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-h1{
+h1 {
   font-weight: bold;
   margin-bottom: 25px;
   font-size: 48px;
 }
-header button{
+header button {
   border: none;
   padding: 10px;
   width: 50px;
   height: 50px;
   cursor: pointer;
-  background-color: rgb(21,20,20);
+  background-color: rgb(21, 20, 20);
   border-radius: 100%;
   color: aliceblue;
   font-size: 20px;
 }
-.cards-container{
+.cards-container {
   display: flex;
 }
-.cards{
+.cards {
   width: 225px;
   height: 225px;
-  background-color: rgb(237,182,44);
+  background-color: rgb(237, 182, 44);
   padding: 10px;
   border-radius: 15px;
   display: flex;
@@ -101,12 +110,12 @@ header button{
   margin-right: 20px;
   margin-bottom: 20px;
 }
-.date{
+.date {
   font-size: 12.5px;
   font-weight: bold;
   text-align: center;
 }
-.modal{
+.modal {
   width: 600px;
   background-color: azure;
   border-radius: 10px;
@@ -115,7 +124,7 @@ header button{
   display: flex;
   flex-direction: column;
 }
-.modal button{
+.modal button {
   padding: 10px 20px;
   font-size: 20px;
   width: 50%;
@@ -126,7 +135,7 @@ header button{
   cursor: pointer;
   border-radius: 16px;
 }
-#close{
+#close {
   background-color: red;
 }
 </style>
